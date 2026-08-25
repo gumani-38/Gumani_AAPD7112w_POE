@@ -38,7 +38,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.btnAttachMedia = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // edtLocation
@@ -74,30 +75,36 @@
             // 
             // btnSubmit
             // 
+            this.btnSubmit.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnSubmit.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSubmit.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnSubmit.Location = new System.Drawing.Point(597, 516);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(165, 38);
             this.btnSubmit.TabIndex = 3;
             this.btnSubmit.Text = "Submit report";
-            this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.UseVisualStyleBackColor = false;
             this.btnSubmit.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnBack
             // 
+            this.btnBack.BackColor = System.Drawing.SystemColors.Highlight;
+            this.btnBack.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnBack.Location = new System.Drawing.Point(681, 85);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(107, 34);
             this.btnBack.TabIndex = 4;
             this.btnBack.Text = "Back to Main";
-            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.UseVisualStyleBackColor = false;
             this.btnBack.Click += new System.EventHandler(this.button2_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(24, 76);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 16);
+            this.label1.Size = new System.Drawing.Size(104, 18);
             this.label1.TabIndex = 5;
             this.label1.Text = "Enter Location";
             this.label1.Click += new System.EventHandler(this.label1_Click);
@@ -105,18 +112,21 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(24, 153);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(101, 16);
+            this.label2.Size = new System.Drawing.Size(110, 18);
             this.label2.TabIndex = 6;
             this.label2.Text = "Select category";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label3.Location = new System.Drawing.Point(24, 289);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 16);
+            this.label3.Size = new System.Drawing.Size(122, 18);
             this.label3.TabIndex = 7;
             this.label3.Text = "Description issue";
             this.label3.Click += new System.EventHandler(this.label3_Click);
@@ -127,27 +137,43 @@
             // 
             // btnAttachMedia
             // 
+            this.btnAttachMedia.BackColor = System.Drawing.SystemColors.ControlText;
+            this.btnAttachMedia.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAttachMedia.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnAttachMedia.Location = new System.Drawing.Point(27, 516);
             this.btnAttachMedia.Name = "btnAttachMedia";
             this.btnAttachMedia.Size = new System.Drawing.Size(171, 38);
             this.btnAttachMedia.TabIndex = 8;
             this.btnAttachMedia.Text = "Attach media file";
-            this.btnAttachMedia.UseVisualStyleBackColor = true;
+            this.btnAttachMedia.UseVisualStyleBackColor = false;
             this.btnAttachMedia.Click += new System.EventHandler(this.btnAttachMedia_Click);
             // 
-            // progressBar1
+            // progressBar
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 12);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(776, 23);
-            this.progressBar1.TabIndex = 9;
+            this.progressBar.BackColor = System.Drawing.SystemColors.ControlText;
+            this.progressBar.Location = new System.Drawing.Point(27, 12);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(380, 23);
+            this.progressBar.TabIndex = 9;
+            this.progressBar.Visible = false;
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatus.Location = new System.Drawing.Point(456, 13);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(0, 20);
+            this.lblStatus.TabIndex = 10;
             // 
             // ReportIssue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(800, 573);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.lblStatus);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btnAttachMedia);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -177,6 +203,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button btnAttachMedia;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Label lblStatus;
     }
 }

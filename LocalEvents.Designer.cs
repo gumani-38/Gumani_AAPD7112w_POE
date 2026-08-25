@@ -34,12 +34,14 @@
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(586, 12);
+            this.btnBack.BackColor = System.Drawing.SystemColors.Highlight;
+            this.btnBack.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnBack.Location = new System.Drawing.Point(587, 21);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(186, 36);
+            this.btnBack.Size = new System.Drawing.Size(173, 39);
             this.btnBack.TabIndex = 0;
             this.btnBack.Text = "Back to Main";
-            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.UseVisualStyleBackColor = false;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
             // label1
@@ -48,7 +50,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(232, 194);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(285, 39);
+            this.label1.Size = new System.Drawing.Size(275, 38);
             this.label1.TabIndex = 1;
             this.label1.Text = "Coming Soon !!!!";
             // 
@@ -56,6 +58,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnBack);

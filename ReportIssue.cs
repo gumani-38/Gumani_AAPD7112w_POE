@@ -10,15 +10,33 @@ using System.Windows.Forms;
 
 namespace Gumani_AAPD7112w_POE
 {
+
     public partial class ReportIssue : Form
     {
+        class IssueReport
+        {
+            public string Location { get; set; }
+            public string Description { get; set; }
+            public string Category { get; set; }
+            public string MediaFilePath { get; set; }
+
+            public string status { get; set; } = "Pending"; // Default status is "Pending"
+            public IssueReport(string location, string description, string category, string mediaFilePath)
+            {
+                Location = location;
+                Description = description;
+                Category = category;
+                MediaFilePath = mediaFilePath;
+            }
+        }
         static string mediaFilePath = string.Empty;
+        static Queue<IssueReport> issueReportsQueue = new Queue<IssueReport>();
         public ReportIssue()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             string location = edtLocation.Text;
             string description = edtDescription.Text;
@@ -44,16 +62,63 @@ namespace Gumani_AAPD7112w_POE
                 MessageBox.Show("Please attach a media file.", "Missing Information", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-           
+
+            try
+            {
+                // 2. Start Progress Bar and disable the button
+                btnSubmit.Enabled = false;
+                progressBar.Visible = true;
+                progressBar.Style = ProgressBarStyle.Marquee;
+                progressBar.MarqueeAnimationSpeed = 30;
+                lblStatus.Text = "Submittion in Progress...";
+
+                // 3. Simulate processing time 
+                await Task.Delay(2000);
+                lblStatus.Text = "Submittion Complete!";
+         
                 MessageBox.Show($"Location: {location}\nDescription: {description}\nCategory: {category}\nMedia File: {mediaFilePath}", "Issue Reported", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // Clear the form fields after submission
-            edtLocation.Clear();
-            edtDescription.Clear();
-            lstCategory.SelectedIndex = -1;
-            mediaFilePath = string.Empty;
+                IssueReport newIssueReport = new IssueReport(location, description, category, mediaFilePath);
+                issueReportsQueue.Enqueue(newIssueReport);
+                PrintQueueContents();
+
+                // Clear the form fields after submission          
+               edtLocation.Clear();
+                edtDescription.Clear();
+                lstCategory.SelectedIndex = -1;
+                mediaFilePath = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                lblStatus.Text = "Submittion Failed!";
+                // Handle unexpected errors
+                MessageBox.Show($"An error occurred during submission: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Reset everything back to normal
+                progressBar.Visible = false;
+                progressBar.Style = ProgressBarStyle.Blocks;
+                progressBar.Value = 0;
+                btnSubmit.Enabled = true;
+                lblStatus.Text = null;
+            }
+        
 
 
+        }
+        private void PrintQueueContents()
+        {
+            System.Diagnostics.Debug.WriteLine("================ CURRENT QUEUE LIST ================");
+            System.Diagnostics.Debug.WriteLine($"Total items in queue: {issueReportsQueue.Count}");
+
+            int count = 1;
+            foreach (IssueReport issue in issueReportsQueue)
+            {
+                System.Diagnostics.Debug.WriteLine($"[{count}] Category: {issue.Category} | Location: {issue.Location} | Description: {issue.Description} | Media File: {issue.MediaFilePath}") ;
+                count++;
+            }
+            System.Diagnostics.Debug.WriteLine("====================================================");
         }
 
         private void label3_Click(object sender, EventArgs e)
