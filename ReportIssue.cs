@@ -30,7 +30,7 @@ namespace Gumani_AAPD7112w_POE
             }
         }
         static string mediaFilePath = string.Empty;
-        static Queue<IssueReport> issueReportsQueue = new Queue<IssueReport>();
+        static List<IssueReport> issueReportsQueue = new List<IssueReport>();
         public ReportIssue()
         {
             InitializeComponent();
@@ -65,21 +65,19 @@ namespace Gumani_AAPD7112w_POE
 
             try
             {
-                // 2. Start Progress Bar and disable the button
                 btnSubmit.Enabled = false;
                 progressBar.Visible = true;
                 progressBar.Style = ProgressBarStyle.Marquee;
                 progressBar.MarqueeAnimationSpeed = 30;
                 lblStatus.Text = "Submittion in Progress...";
 
-                // 3. Simulate processing time 
                 await Task.Delay(2000);
                 lblStatus.Text = "Submittion Complete!";
          
                 MessageBox.Show($"Location: {location}\nDescription: {description}\nCategory: {category}\nMedia File: {mediaFilePath}", "Issue Reported", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 IssueReport newIssueReport = new IssueReport(location, description, category, mediaFilePath);
-                issueReportsQueue.Enqueue(newIssueReport);
+                issueReportsQueue.Add(newIssueReport);
                 PrintQueueContents();
 
                 // Clear the form fields after submission          
@@ -91,7 +89,6 @@ namespace Gumani_AAPD7112w_POE
             catch (Exception ex)
             {
                 lblStatus.Text = "Submittion Failed!";
-                // Handle unexpected errors
                 MessageBox.Show($"An error occurred during submission: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -109,8 +106,8 @@ namespace Gumani_AAPD7112w_POE
         }
         private void PrintQueueContents()
         {
-            System.Diagnostics.Debug.WriteLine("================ CURRENT QUEUE LIST ================");
-            System.Diagnostics.Debug.WriteLine($"Total items in queue: {issueReportsQueue.Count}");
+            System.Diagnostics.Debug.WriteLine("================ CURRENT LIST ================");
+            System.Diagnostics.Debug.WriteLine($"Total items in list: {issueReportsQueue.Count}");
 
             int count = 1;
             foreach (IssueReport issue in issueReportsQueue)
