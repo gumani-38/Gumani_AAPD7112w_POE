@@ -31,10 +31,12 @@ namespace Gumani_AAPD7112w_POE
         }
         static string mediaFilePath = string.Empty;
         static List<IssueReport> issueReportsQueue = new List<IssueReport>();
+        private readonly TranslationService _translationService = new TranslationService();
         public ReportIssue()
         {
             InitializeComponent();
         }
+      
 
         private async void button1_Click(object sender, EventArgs e)
         {
@@ -44,6 +46,7 @@ namespace Gumani_AAPD7112w_POE
 
             if (string.IsNullOrWhiteSpace(location))
             {
+                
                 MessageBox.Show("Please enter a location.", "Missing Information", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -72,9 +75,10 @@ namespace Gumani_AAPD7112w_POE
                 lblStatus.Text = "Submittion in Progress...";
 
                 await Task.Delay(2000);
-                lblStatus.Text = "Submittion Complete!";
-         
-                MessageBox.Show($"Location: {location}\nDescription: {description}\nCategory: {category}\nMedia File: {mediaFilePath}", "Issue Reported", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                lblStatus.Text = await _translationService.TranslateAsync("Submittion Complete!", AppSettings.SelectedLanguageCode);
+
+                MessageBox.Show($"Location: {location}\nDescription: {description}\nCategory: {category}\nMedia File: {mediaFilePath}", await _translationService.TranslateAsync("Issue Reported", AppSettings.SelectedLanguageCode)    , MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 IssueReport newIssueReport = new IssueReport(location, description, category, mediaFilePath);
                 issueReportsQueue.Add(newIssueReport);
@@ -88,8 +92,8 @@ namespace Gumani_AAPD7112w_POE
             }
             catch (Exception ex)
             {
-                lblStatus.Text = "Submittion Failed!";
-                MessageBox.Show($"An error occurred during submission: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                lblStatus.Text = await _translationService.TranslateAsync("Submittion Failed!", AppSettings.SelectedLanguageCode);
+                MessageBox.Show($"An error occurred during submission: {ex.Message}", await _translationService.TranslateAsync("Error", AppSettings.SelectedLanguageCode), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -128,15 +132,18 @@ namespace Gumani_AAPD7112w_POE
 
         }
 
-        private void btnAttachMedia_Click(object sender, EventArgs e)
+        private async void btnAttachMedia_Click(object sender, EventArgs e)
         {
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string filePath = openFileDialog1.FileName;
                 // You can now use the filePath variable to access the selected file
-                MessageBox.Show("Selected file: " + filePath);
+                string langCode = AppSettings.SelectedLanguageCode;
+                string translatedMessage = await _translationService.TranslateAsync("Selected file: ", langCode);
+                MessageBox.Show(translatedMessage + filePath);
                 mediaFilePath = filePath;
             }
+
 
         }
 
@@ -157,9 +164,23 @@ namespace Gumani_AAPD7112w_POE
 
         }
 
-        private void ReportIssue_Load(object sender, EventArgs e)
+        private async void ReportIssue_Load(object sender, EventArgs e)
         {
-
+            string langCode = AppSettings.SelectedLanguageCode;
+            await TranslateFormAsync(langCode);
         }
+        private async Task TranslateFormAsync(string targetLang)
+        {
+            foreach (Control control in this.Controls)
+            {
+                if (!string.IsNullOrWhiteSpace(control.Text))
+                {
+                    control.Text = await _translationService.TranslateAsync(control.Text, targetLang);
+                }
+            }
+
+            this.Text = await _translationService.TranslateAsync(this.Text, targetLang);
+        }
+
     }
 }
