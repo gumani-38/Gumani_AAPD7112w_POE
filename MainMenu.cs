@@ -13,14 +13,21 @@ namespace Gumani_AAPD7112w_POE
 {
     public partial class MainMenu : Form
     {
-        class Messages
+        public class MessageTicket
         {
-            public string ticketNumber { get; set; }
-            public string messageContent { get; set; }
+            public string TicketNumber { get; set; } = string.Empty;
+            public string MessageContent { get; set; } = string.Empty;
         }
 
-        List<Messages> messageList = new List<Messages>();
+        private readonly List<MessageTicket> _messageList = new List<MessageTicket>();
         private readonly TranslationService _translationService = new TranslationService();
+
+        // Separate dictionaries to perfectly track and isolate original English text components
+        private readonly Dictionary<Control, string> _originalControlTexts = new Dictionary<Control, string>();
+        private readonly Dictionary<ToolStripItem, string> _originalMenuItemTexts = new Dictionary<ToolStripItem, string>();
+        private string _originalFormTitle = string.Empty;
+        private bool _isTextsCaptured = false;
+
         public MainMenu()
         {
             InitializeComponent();
@@ -28,51 +35,127 @@ namespace Gumani_AAPD7112w_POE
 
         private async void MainMenu_Load(object sender, EventArgs e)
         {
-            string selectedLangCode = AppSettings.SelectedLanguageCode;
-            await TranslateFormAsync(selectedLangCode); 
-        }
-     
-        private async Task TranslateFormAsync(string targetLang)
-        {
-            foreach (Control control in this.Controls)
+            // Capture English structure exactly once on startup
+            if (!_isTextsCaptured)
             {
-                if (!string.IsNullOrWhiteSpace(control.Text))
+                CaptureOriginalTexts();
+            }
+
+            string selectedLangCode = AppSettings.SelectedLanguageCode ?? "en";
+            await TranslateFormAsync(selectedLangCode);
+            //cmbLanguage default selection based on the saved language code
+            switch (selectedLangCode)
+            {
+                case "en":
+                    cmbLanguage.SelectedItem = "English";
+                    break;
+                case "zu":
+                    cmbLanguage.SelectedItem = "Zulu";
+                    break;
+                case "nso":
+                    cmbLanguage.SelectedItem = "Sepedi";
+                    break;
+                case "ve":
+                    cmbLanguage.SelectedItem = "Venda";
+                    break;
+                case "af":
+                    cmbLanguage.SelectedItem = "Afrikaans";
+                    break;
+                default:
+                    cmbLanguage.SelectedItem = "English"; // Fallback to English
+                    break;
+            }
+        }
+
+        private void CaptureOriginalTexts()
+        {
+            _originalFormTitle = this.Text;
+            _originalControlTexts.Clear();
+            _originalMenuItemTexts.Clear();
+
+            // 1. Map standard controls (Labels, Buttons, Comboboxes)
+            GetAllControls(this);
+
+            // 2. Map structural ToolStrip / MenuStrip elements explicitly
+            if (this.MainMenuStrip != null)
+            {
+                foreach (ToolStripItem item in this.MainMenuStrip.Items)
                 {
-                    control.Text = await _translationService.TranslateAsync(control.Text, targetLang);
+                    CaptureMenuItems(item);
                 }
             }
 
-            this.Text = await _translationService.TranslateAsync(this.Text, targetLang);
+            _isTextsCaptured = true;
         }
 
-
-
-        private void label1_Click(object sender, EventArgs e)
+        private void GetAllControls(Control parent)
         {
+            foreach (Control control in parent.Controls)
+            {
+                // Skip the language combobox text so it doesn't try to translate "English" or "Zulu" literal item views
+                if (control == cmbLanguage) continue;
 
+                if (!string.IsNullOrWhiteSpace(control.Text))
+                {
+                    _originalControlTexts[control] = control.Text;
+                }
+
+                if (control.HasChildren)
+                {
+                    GetAllControls(control);
+                }
+            }
         }
 
-        private void selectMenuToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CaptureMenuItems(ToolStripItem item)
         {
+            if (!string.IsNullOrWhiteSpace(item.Text))
+            {
+                _originalMenuItemTexts[item] = item.Text;
+            }
 
+            if (item is ToolStripMenuItem menuItem)
+            {
+                foreach (ToolStripItem subItem in menuItem.DropDownItems)
+                {
+                    CaptureMenuItems(subItem);
+                }
+            }
         }
 
-
-        private void localEventsAndAnnouncementsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async Task TranslateFormAsync(string targetLang)
         {
-            LocalEvents localEventsForm = new LocalEvents();
-            localEventsForm.Show();
-            this.Hide();
+            var textsToTranslate = new List<string> { _originalFormTitle };
+            textsToTranslate.AddRange(_originalControlTexts.Values);
+            textsToTranslate.AddRange(_originalMenuItemTexts.Values);
+
+            var translations = await _translationService.TranslateBatchAsync(textsToTranslate, targetLang);
+
+ 
+            if (translations.TryGetValue(_originalFormTitle, out string translatedTitle))
+            {
+                this.Text = translatedTitle;
+            }
+
+            foreach (var kvp in _originalControlTexts)
+            {
+                if (translations.TryGetValue(kvp.Value, out string translatedText))
+                {
+                    kvp.Key.Text = translatedText;
+                }
+            }
+
+            foreach (var kvp in _originalMenuItemTexts)
+            {
+                if (translations.TryGetValue(kvp.Value, out string translatedText))
+                {
+                    kvp.Key.Text = translatedText;
+                }
+            }
         }
 
-        private void serviceRequestStatusToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ServiceRequest serviceRequestForm = new ServiceRequest();
-            serviceRequestForm.Show();
-            this.Hide();
-        }
 
-        private void reportIssueToolStripMenuItem_Click(object sender, EventArgs e)
+        private void reportIssueToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             ReportIssue reportIssueForm = new ReportIssue();
             reportIssueForm.Show();
@@ -90,13 +173,13 @@ namespace Gumani_AAPD7112w_POE
 
             if (!string.IsNullOrWhiteSpace(input))
             {
-                var ticket = new Messages { ticketNumber = Guid.NewGuid().ToString(), messageContent = input };
-                messageList.Add(ticket);
+                var ticket = new MessageTicket { TicketNumber = Guid.NewGuid().ToString(), MessageContent = input };
+                _messageList.Add(ticket);
 
-                string confirmation = await _translationService.TranslateAsync(
-                    $"Your message has been sent.\nTicket Number: {ticket.ticketNumber}\nMessage: {ticket.messageContent}",
-                    langCode);
+                string messageTemplate = "Your message has been sent.\nTicket Number: {0}\nMessage: {1}";
+                string translatedTemplate = await _translationService.TranslateAsync(messageTemplate, langCode);
 
+                string confirmation = string.Format(translatedTemplate, ticket.TicketNumber, ticket.MessageContent);
                 string confirmationTitle = await _translationService.TranslateAsync("Message Sent", langCode);
 
                 MessageBox.Show(confirmation, confirmationTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -110,36 +193,34 @@ namespace Gumani_AAPD7112w_POE
             }
         }
 
-
-        private void reportIssueToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            ReportIssue reportIssue = new ReportIssue();
-
-            reportIssue.Show();
-            this.Hide();
-        }
-
-        private async Task localEventsAndAnnouncementsToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private async void localEventsAndAnnouncementsToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             string langCode = AppSettings.SelectedLanguageCode;
             string message = await _translationService.TranslateAsync("Not available at the moment, but coming soon!", langCode);
-            MessageBox.Show(message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string title = await _translationService.TranslateAsync("Information", langCode);
+            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async void serviceRequestStatusToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             string langCode = AppSettings.SelectedLanguageCode;
             string message = await _translationService.TranslateAsync("Not available at the moment, but coming soon!", langCode);
+            string title = await _translationService.TranslateAsync("Information", langCode);
 
-            MessageBox.Show(message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async void cmbLanguage_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-               if (cmbLanguage.SelectedItem == null) return;
+            if (cmbLanguage.SelectedItem == null) return;
+
+            // Enforce initial configuration capture if not run already
+            if (!_isTextsCaptured)
+            {
+                CaptureOriginalTexts();
+            }
 
             var selectedLang = cmbLanguage.SelectedItem.ToString();
-            Console.WriteLine($"Selected language: {selectedLang}");
             string langCode = "en";
 
             switch (selectedLang)
@@ -160,8 +241,10 @@ namespace Gumani_AAPD7112w_POE
                     langCode = "af";
                     break;
             }
+
             AppSettings.SelectedLanguageCode = langCode;
             await TranslateFormAsync(langCode);
         }
+
     }
 }

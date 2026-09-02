@@ -119,7 +119,6 @@
             this.cmbLanguage.Location = new System.Drawing.Point(569, 53);
             this.cmbLanguage.Name = "cmbLanguage";
             this.cmbLanguage.Size = new System.Drawing.Size(184, 24);
-            this.cmbLanguage.SelectedIndex = 0;
             this.cmbLanguage.TabIndex = 5;
             this.cmbLanguage.SelectedIndexChanged += new System.EventHandler(this.cmbLanguage_SelectedIndexChanged_1);
             // 
