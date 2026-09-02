@@ -84,7 +84,7 @@
             this.btnSubmit.TabIndex = 3;
             this.btnSubmit.Text = "Submit report";
             this.btnSubmit.UseVisualStyleBackColor = false;
-            this.btnSubmit.Click += new System.EventHandler(this.button1_Click);
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // btnBack
             // 

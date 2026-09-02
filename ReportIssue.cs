@@ -38,7 +38,7 @@ namespace Gumani_AAPD7112w_POE
         }
       
 
-        private async void button1_Click(object sender, EventArgs e)
+        private async void btnSubmit_Click(object sender, EventArgs e)
         {
             string location = edtLocation.Text;
             string description = edtDescription.Text;

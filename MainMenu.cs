@@ -22,7 +22,7 @@ namespace Gumani_AAPD7112w_POE
         private readonly List<MessageTicket> _messageList = new List<MessageTicket>();
         private readonly TranslationService _translationService = new TranslationService();
 
-        // Separate dictionaries to perfectly track and isolate original English text components
+   
         private readonly Dictionary<Control, string> _originalControlTexts = new Dictionary<Control, string>();
         private readonly Dictionary<ToolStripItem, string> _originalMenuItemTexts = new Dictionary<ToolStripItem, string>();
         private string _originalFormTitle = string.Empty;
@@ -35,7 +35,7 @@ namespace Gumani_AAPD7112w_POE
 
         private async void MainMenu_Load(object sender, EventArgs e)
         {
-            // Capture English structure exactly once on startup
+         
             if (!_isTextsCaptured)
             {
                 CaptureOriginalTexts();
@@ -43,7 +43,7 @@ namespace Gumani_AAPD7112w_POE
 
             string selectedLangCode = AppSettings.SelectedLanguageCode ?? "en";
             await TranslateFormAsync(selectedLangCode);
-            //cmbLanguage default selection based on the saved language code
+
             switch (selectedLangCode)
             {
                 case "en":
@@ -62,7 +62,7 @@ namespace Gumani_AAPD7112w_POE
                     cmbLanguage.SelectedItem = "Afrikaans";
                     break;
                 default:
-                    cmbLanguage.SelectedItem = "English"; // Fallback to English
+                   cmbLanguage.SelectedItem = "English"; // Fallback to English
                     break;
             }
         }
@@ -73,10 +73,9 @@ namespace Gumani_AAPD7112w_POE
             _originalControlTexts.Clear();
             _originalMenuItemTexts.Clear();
 
-            // 1. Map standard controls (Labels, Buttons, Comboboxes)
             GetAllControls(this);
 
-            // 2. Map structural ToolStrip / MenuStrip elements explicitly
+   
             if (this.MainMenuStrip != null)
             {
                 foreach (ToolStripItem item in this.MainMenuStrip.Items)
@@ -92,7 +91,7 @@ namespace Gumani_AAPD7112w_POE
         {
             foreach (Control control in parent.Controls)
             {
-                // Skip the language combobox text so it doesn't try to translate "English" or "Zulu" literal item views
+                
                 if (control == cmbLanguage) continue;
 
                 if (!string.IsNullOrWhiteSpace(control.Text))
@@ -214,7 +213,7 @@ namespace Gumani_AAPD7112w_POE
         {
             if (cmbLanguage.SelectedItem == null) return;
 
-            // Enforce initial configuration capture if not run already
+
             if (!_isTextsCaptured)
             {
                 CaptureOriginalTexts();
