@@ -35,7 +35,7 @@ namespace Gumani_AAPD7112w_POE
 
         private async void MainMenu_Load(object sender, EventArgs e)
         {
-         
+
             if (!_isTextsCaptured)
             {
                 CaptureOriginalTexts();
@@ -62,7 +62,7 @@ namespace Gumani_AAPD7112w_POE
                     cmbLanguage.SelectedItem = "Afrikaans";
                     break;
                 default:
-                   cmbLanguage.SelectedItem = "English"; // Fallback to English
+                    cmbLanguage.SelectedItem = "English"; // Fallback to English
                     break;
             }
         }
@@ -192,14 +192,7 @@ namespace Gumani_AAPD7112w_POE
             }
         }
 
-        private async void localEventsAndAnnouncementsToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            string langCode = AppSettings.SelectedLanguageCode;
-            string message = await _translationService.TranslateAsync("Not available at the moment, but coming soon!", langCode);
-            string title = await _translationService.TranslateAsync("Information", langCode);
-            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
+     
         private async void serviceRequestStatusToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             string langCode = AppSettings.SelectedLanguageCode;
@@ -245,5 +238,11 @@ namespace Gumani_AAPD7112w_POE
             await TranslateFormAsync(langCode);
         }
 
+        private void localEventsAndAnnouncementsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LocalEvents localEventsForm = new LocalEvents();
+            localEventsForm.Show();
+            this.Hide();
+        }
     }
 }

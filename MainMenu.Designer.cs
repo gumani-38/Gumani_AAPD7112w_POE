@@ -87,7 +87,7 @@
             this.localEventsAndAnnouncementsToolStripMenuItem.Name = "localEventsAndAnnouncementsToolStripMenuItem";
             this.localEventsAndAnnouncementsToolStripMenuItem.Size = new System.Drawing.Size(344, 26);
             this.localEventsAndAnnouncementsToolStripMenuItem.Text = "Local events and Announcements";
-          
+            this.localEventsAndAnnouncementsToolStripMenuItem.Click += new System.EventHandler(this.localEventsAndAnnouncementsToolStripMenuItem_Click);
             // 
             // serviceRequestStatusToolStripMenuItem
             // 

@@ -84,7 +84,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnnounncementCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AnnounncementCard.Designer.cs">
+      <DependentUpon>AnnounncementCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="EventCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EventCard.Designer.cs">
+      <DependentUpon>EventCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="LocalEvents.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +124,12 @@
       <DependentUpon>ServiceRequest.cs</DependentUpon>
     </Compile>
     <Compile Include="TranslationService.cs" />
+    <EmbeddedResource Include="AnnounncementCard.resx">
+      <DependentUpon>AnnounncementCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EventCard.resx">
+      <DependentUpon>EventCard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LocalEvents.resx">
       <DependentUpon>LocalEvents.cs</DependentUpon>
     </EmbeddedResource>
