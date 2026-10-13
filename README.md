@@ -45,9 +45,3 @@ Before you begin, ensure you have the following installed:
 
 ---
 
-## 🛠️ Main Features Included
-
-* **Main Menu:** The central hub to navigate through the municipal services app.
-* **Report Issues:** Form interface allowing users to submit infrastructure or service complaints.
-* **Local Events & Announcements:** Interactive cards displaying neighborhood gatherings and updates.
-* **Service Requests:** Submit trackable requests for municipal action.
