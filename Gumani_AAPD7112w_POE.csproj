@@ -91,6 +91,7 @@
       <DependentUpon>AnnounncementCard.cs</DependentUpon>
     </Compile>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="DataStore.cs" />
     <Compile Include="EventCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -123,6 +124,7 @@
     <Compile Include="ServiceRequest.Designer.cs">
       <DependentUpon>ServiceRequest.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatusAlgorithms.cs" />
     <Compile Include="TranslationService.cs" />
     <EmbeddedResource Include="AnnounncementCard.resx">
       <DependentUpon>AnnounncementCard.cs</DependentUpon>

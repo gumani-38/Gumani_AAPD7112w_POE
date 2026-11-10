@@ -78,14 +78,25 @@ namespace Gumani_AAPD7112w_POE
 
                 lblStatus.Text = await _translationService.TranslateAsync("Submittion Complete!", AppSettings.SelectedLanguageCode);
 
-                MessageBox.Show($"Location: {location}\nDescription: {description}\nCategory: {category}\nMedia File: {mediaFilePath}", await _translationService.TranslateAsync("Issue Reported", AppSettings.SelectedLanguageCode)    , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                int defaultPriority = 2;
 
-                IssueReport newIssueReport = new IssueReport(location, description, category, mediaFilePath);
-                issueReportsQueue.Add(newIssueReport);
-                PrintQueueContents();
+                // Save the issue into the global list and get the new unique ID
+                string trackingId = DataStore.AddNewRequest(location, description, category, mediaFilePath, defaultPriority);
+
+                // Include the Tracking ID in the localized message box so the user can copy it
+                string localizedTitle = await _translationService.TranslateAsync("Issue Reported", AppSettings.SelectedLanguageCode);
+                string successMessage = $"Issue successfully logged!\n\n" +
+                                        $"👉 YOUR TRACKING ID: {trackingId}\n\n" +
+                                        $"Location: {location}\n" +
+                                        $"Description: {description}\n" +
+                                        $"Category: {category}\n" +
+                                        $"Media File: {mediaFilePath}";
+
+                MessageBox.Show(successMessage, localizedTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
 
                 // Clear the form fields after submission          
-               edtLocation.Clear();
+                edtLocation.Clear();
                 edtDescription.Clear();
                 lstCategory.SelectedIndex = -1;
                 mediaFilePath = string.Empty;
@@ -108,19 +119,7 @@ namespace Gumani_AAPD7112w_POE
 
 
         }
-        private void PrintQueueContents()
-        {
-            System.Diagnostics.Debug.WriteLine("================ CURRENT LIST ================");
-            System.Diagnostics.Debug.WriteLine($"Total items in list: {issueReportsQueue.Count}");
-
-            int count = 1;
-            foreach (IssueReport issue in issueReportsQueue)
-            {
-                System.Diagnostics.Debug.WriteLine($"[{count}] Category: {issue.Category} | Location: {issue.Location} | Description: {issue.Description} | Media File: {issue.MediaFilePath}") ;
-                count++;
-            }
-            System.Diagnostics.Debug.WriteLine("====================================================");
-        }
+   
 
         private void label3_Click(object sender, EventArgs e)
         {

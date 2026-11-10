@@ -195,11 +195,9 @@ namespace Gumani_AAPD7112w_POE
      
         private async void serviceRequestStatusToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            string langCode = AppSettings.SelectedLanguageCode;
-            string message = await _translationService.TranslateAsync("Not available at the moment, but coming soon!", langCode);
-            string title = await _translationService.TranslateAsync("Information", langCode);
-
-            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ServiceRequest serviceRequestForm = new ServiceRequest();
+            serviceRequestForm.Show();
+            this.Hide();
         }
 
         private async void cmbLanguage_SelectedIndexChanged_1(object sender, EventArgs e)
