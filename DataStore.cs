@@ -51,6 +51,78 @@ namespace Gumani_AAPD7112w_POE
                 status = "Verification Pending",
                 DateLogged = DateTime.Now.AddDays(-1)
             });
+
+            LocalRequests.Add(new IssueReport
+            {
+                UniqueId = "REQ-1003",
+                Location = "Arcadia, Stanza Bopape St",
+                Description = "Streetlight not working, area is dark at night.",
+                Category = "Electricity & Streetlights",
+                MediaFilePath = "",
+                PriorityScore = 3,
+                status = "Report Logged",
+                DateLogged = DateTime.Now.AddDays(-3)
+            });
+            LocalRequests.Add(new IssueReport
+            {
+                UniqueId = "REQ-1004",
+                Location = "Muckleneuk, Hamilton St",
+                Description = "Overflowing garbage bin attracting pests.",
+                Category = "Waste Management",
+                MediaFilePath = "",
+                PriorityScore = 2,
+                status = "Verification Pending",
+                DateLogged = DateTime.Now.AddDays(-1)
+            });
+            LocalRequests.Add(new IssueReport
+            {
+                UniqueId = "REQ-1005",
+                Location = "Brooklyn, Fehrsen St",
+                Description = "Graffiti on public wall, needs cleaning.",
+                Category = "Public Safety & Security",
+                MediaFilePath = "",
+                PriorityScore = 3,
+                status = "Report Logged",
+                DateLogged = DateTime.Now.AddDays(-4)
+            });
+
+            LocalRequests.Add(new IssueReport
+            {
+                UniqueId = "REQ-1006",
+                Location = "Muckleneuk, Hamilton St",
+                Description = "Overflowing garbage bin attracting pests.",
+                Category = "Waste Management",
+                MediaFilePath = "",
+                PriorityScore = 2,
+                status = "Verification Pending",
+                DateLogged = DateTime.Now.AddDays(-1)
+            });
+
+            LocalRequests.Add(new IssueReport
+            {
+                UniqueId = "REQ-1007",
+                Location = "Brooklyn, Fehrsen St",
+                Description = "Graffiti on public wall, needs cleaning.",
+                Category = "Public Safety & Security",
+                MediaFilePath = "",
+                PriorityScore = 3,
+                status = "Report Logged",
+                DateLogged = DateTime.Now.AddDays(-4)
+            });
+
+            LocalRequests.Add(new IssueReport
+            {
+                UniqueId = "REQ-1008",
+                Location = "Pretoria CBD, Church Street",
+                Description = "Deep pothole damaging car tires near intersection.",
+                Category = "Roads & Stormwater",
+                MediaFilePath = "",
+                PriorityScore = 1,
+                status = "Report Logged",
+                DateLogged = DateTime.Now.AddDays(-2)
+            });
+
+
         }
 
 

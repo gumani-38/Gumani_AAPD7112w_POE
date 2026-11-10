@@ -3,7 +3,84 @@ using System.Collections.Generic;
 
 namespace Gumani_AAPD7112w_POE
 {
-  // BINARY SEARCH TREE  FOR TRACKING ID LOOKUP
+
+    // MIN-HEAP (PRIORITY QUEUE) FOR URGENCY SORTING
+    public class IssueMinHeap
+    {
+        private List<IssueReport> heap = new List<IssueReport>();
+
+        public int Count => heap.Count;
+
+        public void Insert(IssueReport report)
+        {
+            heap.Add(report);
+            HeapifyUp(heap.Count - 1);
+        }
+
+        public IssueReport ExtractMin()
+        {
+            if (heap.Count == 0) return null;
+
+            IssueReport minItem = heap[0];
+            int lastIndex = heap.Count - 1;
+            heap[0] = heap[lastIndex];
+            heap.RemoveAt(lastIndex);
+
+            if (heap.Count > 0)
+            {
+                HeapifyDown(0);
+            }
+
+            return minItem;
+        }
+
+        private void HeapifyUp(int index)
+        {
+            while (index > 0)
+            {
+                int parentIndex = (index - 1) / 2;
+                // Compare priority scores (Lower score = Higher urgency)
+                if (heap[index].PriorityScore < heap[parentIndex].PriorityScore)
+                {
+                    Swap(index, parentIndex);
+                    index = parentIndex;
+                }
+                else break;
+            }
+        }
+
+        private void HeapifyDown(int index)
+        {
+            int lastIndex = heap.Count - 1;
+            while (true)
+            {
+                int leftChild = 2 * index + 1;
+                int rightChild = 2 * index + 2;
+                int smallest = index;
+
+                if (leftChild <= lastIndex && heap[leftChild].PriorityScore < heap[smallest].PriorityScore)
+                    smallest = leftChild;
+
+                if (rightChild <= lastIndex && heap[rightChild].PriorityScore < heap[smallest].PriorityScore)
+                    smallest = rightChild;
+
+                if (smallest != index)
+                {
+                    Swap(index, smallest);
+                    index = smallest;
+                }
+                else break;
+            }
+        }
+
+        private void Swap(int i, int j)
+        {
+            IssueReport temp = heap[i];
+            heap[i] = heap[j];
+            heap[j] = temp;
+        }
+    }
+    // BINARY SEARCH TREE  FOR TRACKING ID LOOKUP
 
     public class BSTNode
     {

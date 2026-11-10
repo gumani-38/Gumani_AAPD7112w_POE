@@ -46,32 +46,44 @@ namespace Gumani_AAPD7112w_POE
         }
         private void RefreshDisplayGrid()
         {
-   
             dgvStatusMaster.Rows.Clear();
             dgvStatusMaster.Columns.Clear();
 
-            //  dynamically add columns to the DataGridView
+          
             dgvStatusMaster.Columns.Add("UniqueId", "Tracking ID");
+            dgvStatusMaster.Columns.Add("Priority", "Priority"); 
             dgvStatusMaster.Columns.Add("Category", "Category");
             dgvStatusMaster.Columns.Add("Location", "Location");
             dgvStatusMaster.Columns.Add("Status", "Current Status");
             dgvStatusMaster.Columns.Add("DateLogged", "Date Logged");
 
-  
             dgvStatusMaster.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-      
+       
+            IssueMinHeap prioritySorter = new IssueMinHeap();
+
+        
             foreach (var issue in DataStore.LocalRequests)
             {
+                prioritySorter.Insert(issue);
+            }
+
+
+            while (prioritySorter.Count > 0)
+            {
+                IssueReport urgentIssue = prioritySorter.ExtractMin();
+
                 dgvStatusMaster.Rows.Add(
-                    issue.UniqueId,
-                    issue.Category,
-                    issue.Location,
-                    issue.status,
-                    issue.DateLogged.ToString("yyyy-MM-dd HH:mm")
+                    urgentIssue.UniqueId,
+                    $"Level {urgentIssue.PriorityScore}", 
+                    urgentIssue.Category,
+                    urgentIssue.Location,
+                    urgentIssue.status,
+                    urgentIssue.DateLogged.ToString("yyyy-MM-dd HH:mm")
                 );
             }
         }
+
 
         private void btnTrack_Click(object sender, EventArgs e)
         {
